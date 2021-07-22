@@ -1,5 +1,8 @@
 # Short python and OCT-CBORT tutorial
 
+This repository is prepared for `oct-cbort` python tutorial at Vakoc Group
+by Stephanie Nam (snam@alum.mit.edu)
+
 ## Opening
 We’ve discussed the advantages of transitioning our post-processing framework from MATLAB to python, I wanted to have a short hands-on session (~1hr) to nudge you to take that first step of transitioning to python. You will bring your laptop and I will:
 
@@ -8,14 +11,15 @@ We’ve discussed the advantages of transitioning our post-processing framework 
 3. Show example workflow of OCT-CBORT library
 4. Discuss good practices (using Git and h5 file format)
 
-## Prerequisites
 
+## Prerequisites
 The oct-cbort python tutorial is scheduled as a topic for Vakoc Lab group meeting on Fri, 07/23 at 2pm. We will meet at Deutsch conference room - please bring your laptops with all required installations to get the most out of this session. Zoom link will be available too. 
 In the following installations, I recommend just using default settings. Just talk to me if you have questions. 
 
 1. Install Anaconda (https://www.anaconda.com/products/individual)
 2. Create a github user account and become a member of BenVakocLab teams.
 3. If you are not familiar with Git, install GitHub Desktop (https://desktop.github.com/).  Link your user account to the application (just log in form the app).
+4. Download the example data (https://www.dropbox.com/s/now7z1465jtqbtm/example_data.zip?dl=0)
 
 Disclaimer: 
 I do not consider my python to be “industry standard”, I learned python on my own (through books, various online resources and countless trial and errors), so what I cover today is what I think would have made it easier for me if someone spent a dedicated hour to help me get started on python as a Matlab user.
@@ -53,7 +57,8 @@ SPYDER is similar to MATLAB. You can
 * See the variables
 * Have breakpoints and debug.
 
-The following shows a brief comparison of the syntax.
+The following shows a brief comparison of the syntax. 
+Files are included: `ex01_matlab.m` and `ex01_python.py`
 
 ```matlab
 % MATLAB's basic datatype is a vector
