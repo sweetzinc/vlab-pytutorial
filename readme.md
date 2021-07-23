@@ -122,25 +122,30 @@ plt.plot(x, z)
 
 
 ## OCT-CBORT
+### Installation and Damon's tutorial
 1. From github app, clone `oct-cbort`
 2. Install for cpu processing. (Create a new environment) 
 3. Create a separate folder outside the repository, copy the tutorials
 4. Launch Jupyter Notebook and run Damon's tutorial
 5. Clone [this](https://github.com/sweetzinc/vlab-pytutorial) repository for scripting example.
-2. Install for cpu processing. 
+2. Install for cpu processing. <br>Note! Mixing conda and pip install sometimes breaks your installations and it's difficult to fix, but when one of them does not give what you want, you have to mix them. Ensure you are contained in a conda environment so you can remove the environment when things don't work out.
 ```bash
 # Follow Damon's readme. Go to repository directory
 conda crate --name oct38-cpu python=3.8
 conda activate oct38-cpu
 pip install -r requirements.txt
+# Install ipython kernel to run Damon's tutorials
+conda install -c anaconda ipykernel
+python -m ipykernel install --user --name=oct38-cpu
 ```
 3. Create a separate folder outside the repository, copy the tutorials
 4. Launch Jupyter Notebook and run Damon's tutorial
 ```bash
 jupyter notebook
 ```
-5. Clone Stephanie's test-cbort for scripting example.
-6. Go to Spyder, change the python interpreter, run Stephanie's example for VakocLab's legacy chicken nerve dataset. 
+### Running `oct-cbort` in Spyder
+1. Clone Stephanie's test-cbort for scripting example.
+2. Go to Spyder, **change the python interpreter**, run `cbort-ex01_process_chicken_ps.py` for VakocLab's chicken nerve dataset acquired on a SPARC system. 
 
 
 ## HDF 
@@ -164,3 +169,4 @@ Fetch to obtain all example files I've shown you today.
 
 1. MATLAB vs. Numpy - Numpy's official documentation (https://numpy.org/doc/stable/user/numpy-for-matlab-users.html)
 2. Python Data Science Handbook - cool e-book with lots of plotting examples (https://jakevdp.github.io/PythonDataScienceHandbook/)
+3. Intro to Git, a lot of good tutorial videos exeist on Youtube too. (https://guides.github.com/introduction/git-handbook/)
