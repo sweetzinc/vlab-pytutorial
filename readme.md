@@ -144,8 +144,19 @@ python -m ipykernel install --user --name=oct38-cpu
 jupyter notebook
 ```
 ### Running `oct-cbort` in Spyder
-1. Clone Stephanie's test-cbort for scripting example.
-2. Go to Spyder, **change the python interpreter**, run `cbort-ex01_process_chicken_ps.py` for VakocLab's chicken nerve dataset acquired on a SPARC system. 
+1. Clone Stephanie's this repository for scripting example.
+2. Install spyder kernel (in the cobrt repository)
+```bash
+conda activate oct38-cpu
+pip install spyder-kernels
+conda deactivate
+conda activate spyderenv
+spyder
+```
+3. Go to Spyder, **change the python interpreter and restart**, run `cbort-ex01_process_chicken_ps.py` for VakocLab's chicken nerve dataset acquired on a SPARC system. 
+
+Spyder must be set up correctly to use with multiple conda environments. Read [here](https://github.com/spyder-ide/spyder/wiki/Working-with-packages-and-environments-in-Spyder 
+) for more info. 
 
 
 ## Git 
