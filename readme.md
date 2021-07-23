@@ -27,13 +27,15 @@ I do not consider my python to be “industry standard”, I learned python on m
 
 
 ## Spyder and Python
+For windows, I recommend using Anaconda Prompt. For MacOS, standard terminal works. GUIs exist, but a lot of tutorials on the internet already assume that you know basics of the commandline interface, so we use it on the tutorial. 
+
 
 ### Install
 
 * Anaconda prompt and Conda's "environments"
 * Compare `pip install` vs. `conda install`
 
-```markdown
+```bash
 # Create conda environment
 conda create -n spyderenv python=3.8
 
@@ -47,7 +49,6 @@ conda install spyder=5.0.5
 # Run SPYDER
 spyder
 ```
-
 
 
 ### Introduce SPYDER and python
@@ -126,6 +127,19 @@ plt.plot(x, z)
 3. Create a separate folder outside the repository, copy the tutorials
 4. Launch Jupyter Notebook and run Damon's tutorial
 5. Clone [this](https://github.com/sweetzinc/vlab-pytutorial) repository for scripting example.
+2. Install for cpu processing. 
+```bash
+# Follow Damon's readme. Go to repository directory
+conda crate --name oct38-cpu python=3.8
+conda activate oct38-cpu
+pip install -r requirements.txt
+```
+3. Create a separate folder outside the repository, copy the tutorials
+4. Launch Jupyter Notebook and run Damon's tutorial
+```bash
+jupyter notebook
+```
+5. Clone Stephanie's test-cbort for scripting example.
 6. Go to Spyder, change the python interpreter, run Stephanie's example for VakocLab's legacy chicken nerve dataset. 
 
 
