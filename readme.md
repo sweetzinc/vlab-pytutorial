@@ -138,7 +138,13 @@ jupyter notebook
 
 
 ## HDF 
-Hierarchical Data Format (HDF) can be advantageous for storing our data. It's great to have slicing when opening multi-dimensional dataset. 
+Hierarchical Data Format (HDF) can be advantageous for storing our data. 
+* Flexible slicing when opening multi-dimensional dataset. 
+* Storing metadata 
+* Grouping different data groups
+* ImageJ compatibility (with a plugin)
+
+Advantages are well explained at the [official website](https://www.hdfgroup.org/solutions/hdf5/).
 
 
 ## Git 
