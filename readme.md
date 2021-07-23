@@ -148,6 +148,11 @@ jupyter notebook
 2. Go to Spyder, **change the python interpreter**, run `cbort-ex01_process_chicken_ps.py` for VakocLab's chicken nerve dataset acquired on a SPARC system. 
 
 
+## Git 
+From GitHub App, see the changes made to the example python file. 
+Fetch to obtain all example files I've shown you today. 
+
+
 ## HDF 
 Hierarchical Data Format (HDF) can be advantageous for storing our data. 
 * Flexible slicing when opening multi-dimensional dataset
@@ -155,12 +160,10 @@ Hierarchical Data Format (HDF) can be advantageous for storing our data.
 * Grouping different data groups
 * ImageJ compatibility (with a plugin)
 
-Advantages are well explained at the [official website](https://www.hdfgroup.org/solutions/hdf5/).
+Advantages are well explained at HDF's [official website](https://www.hdfgroup.org/solutions/hdf5/).
+* Very clear documentation for python library [h5py](https://docs.h5py.org/en/stable/)
+* Supported by [MATLAB](https://www.mathworks.com/help/matlab/hdf5-files.html)
 
-
-## Git 
-From GitHub App, see the changes made to the example python file. 
-Fetch to obtain all example files I've shown you today. 
 
 
 
@@ -170,3 +173,4 @@ Fetch to obtain all example files I've shown you today.
 1. MATLAB vs. Numpy - Numpy's official documentation (https://numpy.org/doc/stable/user/numpy-for-matlab-users.html)
 2. Python Data Science Handbook - cool e-book with lots of plotting examples (https://jakevdp.github.io/PythonDataScienceHandbook/)
 3. Intro to Git, a lot of good tutorial videos exeist on Youtube too. (https://guides.github.com/introduction/git-handbook/)
+
