@@ -26,7 +26,7 @@ I do not consider my python to be “industry standard”, I learned python on m
 
 
 
-## SPYDER
+## Spyder and Python
 
 ### Install
 
@@ -52,10 +52,12 @@ spyder
 
 ### Introduce SPYDER and python
 
-SPYDER is similar to MATLAB. You can
+[SPYDER](https://www.spyder-ide.org/) provides similar user interface to MATLAB. You can
 
 * See the variables
-* Have breakpoints and debug.
+* Work on console
+* Have breakpoints and debug
+* Work with 'cells' with `#%%` and `shift+enter`
 
 The following shows a brief comparison of the syntax. 
 Files are included: `ex01_matlab.m` and `ex01_python.py`
@@ -120,16 +122,16 @@ plt.plot(x, z)
 
 ## OCT-CBORT
 1. From github app, clone `oct-cbort`
-2. Install for cpu processing. (Create a new environment)
+2. Install for cpu processing. (Create a new environment) 
 3. Create a separate folder outside the repository, copy the tutorials
 4. Launch Jupyter Notebook and run Damon's tutorial
-5. Clone Stephanie's test-cbort for scripting example.
+5. Clone [this](https://github.com/sweetzinc/vlab-pytutorial) repository for scripting example.
 6. Go to Spyder, change the python interpreter, run Stephanie's example for VakocLab's legacy chicken nerve dataset. 
 
 
 ## HDF 
 Hierarchical Data Format (HDF) can be advantageous for storing our data. 
-* Flexible slicing when opening multi-dimensional dataset. 
+* Flexible slicing when opening multi-dimensional dataset
 * Storing metadata 
 * Grouping different data groups
 * ImageJ compatibility (with a plugin)
@@ -140,6 +142,7 @@ Advantages are well explained at the [official website](https://www.hdfgroup.org
 ## Git 
 From GitHub App, see the changes made to the example python file. 
 Fetch to obtain all example files I've shown you today. 
+
 
 
 
