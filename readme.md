@@ -131,7 +131,7 @@ plt.plot(x, z)
 2. Install for cpu processing. <br>Note! Mixing conda and pip install sometimes breaks your installations and it's difficult to fix, but when one of them does not give what you want, you have to mix them. Ensure you are contained in a conda environment so you can remove the environment when things don't work out.
 ```bash
 # Follow Damon's readme. Go to repository directory
-conda crate --name oct38-cpu python=3.8
+conda create --name oct38-cpu python=3.8
 conda activate oct38-cpu
 pip install -r requirements.txt
 # Install ipython kernel to run Damon's tutorials
