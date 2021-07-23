@@ -56,7 +56,7 @@ struct_out = struct_obj.reconstruct(data=data)
 for key,val in struct_out.items():
     data.processedData[key] = struct_out[key]
     
-print(struct_out.keys())
+print("struct_out.keys() >> ", struct_out.keys())
 plt.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
 
 
@@ -67,7 +67,7 @@ outps = ps.reconstruct(data=data)
 for key,val in outps.items():
     data.processedData[key] = outps[key]
     
-print(outps.keys())
+print("outps.keys() >> ", outps.keys())
 
 fig = plt.figure(figsize=(12, 12))
 ax = fig.add_subplot(221)
