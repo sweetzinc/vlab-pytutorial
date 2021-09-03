@@ -143,6 +143,12 @@ python -m ipykernel install --user --name=oct38-cpu
 ```bash
 jupyter notebook
 ```
+
+### Tutorials 
+* Use from GUI (as an end user, see with chicken dataset) 
+* Use from Jupyter Notebook
+* Use from Spyder (Developing new framework and processing)
+
 ### Running `oct-cbort` in Spyder
 1. Clone Stephanie's this repository for scripting example.
 2. Install spyder kernel (in the cobrt repository)
