@@ -25,14 +25,14 @@ path_dir = os.path.join(foldername, session_name)
 
 #%%
 data = Load(directory = path_dir)
-frame= int(data.scanSettings['numFrames']/2)
+frame= 1 #int(data.scanSettings['numFrames']/2)
 data.loadFringe(frame=frame)
 print(f"Loaded frame:{frame}")
 
 
 #%% Tomogram processing : complex tomogram, k-space fringe, stokes vectors  
 data.reconstructionSettings['processState'] = 'struct+ps+kspace' #''angio+sv'
-data.reconstructionSettings['spectralBinning'] = False
+data.reconstructionSettings['spectralBinning'] = True
 
 tom = Tomogram(mode='heterodyne')
 outtom = tom.reconstruct(data=data)
@@ -76,9 +76,9 @@ ax = fig.add_subplot(122)
 ax.imshow(data.processedData['weight'],cmap='gray', aspect='auto')
 
 #%% PS processing
-data.psSettings['zOffset'] = 15 # this is deltaZ for differential calculation
+data.psSettings['zOffset'] = 2 # this is deltaZ for differential calculation
 data.psSettings['xFilter'] = 11
-ps = Polarization('classic')
+ps = Polarization('sb')
 outps = ps.reconstruct(data=data)
 for key,val in outps.items():
     data.processedData[key] = outps[key]
