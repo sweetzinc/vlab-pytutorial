@@ -27,11 +27,7 @@ import shutil, time
 #%% Load data
 # session_name = '[p.Chicken052621][s.SANsChicken_smallV][05-26-2021_13-11-59]'
 # path_dir = os.path.join(os.getcwd(), 'example_data', session_name)
-# path_dir = 'C:\\Users\\UCL-SPARC\\Downloads\\OS1_D1'
-# path_dir = r'G:\test_psphantoms\user.Stephanie\[p.legacy_ps]\[p.legacy_ps][s.phantom_smallbiseg][08-16-2021_14-14-56]'
-# path_dir = r'G:\test_psphantoms\user.Stephanie\[p.ps_test]\[p.ps_test][s.phantom_noglass][10-13-2021_16-15-48]'
-# path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.mirror_mmode][10-14-2021_14-49-49]'
-path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.mirror_mmode][10-14-2021_15-51-22]'
+path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.intralipid4pct][10-14-2021_13-46-01]'
 data = Load(directory = path_dir)
 data.loadFringe(frame=5)
 
@@ -97,9 +93,9 @@ plt.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
 
 
 #%% PS processing
-data.psSettings['zOffset'] = 10 # this is deltaZ for differential calculation
+data.psSettings['zOffset'] = 15 # this is deltaZ for differential calculation
 data.psSettings['oopFilter']  = 2
-data.psSettings['xFilter'] = 11
+data.psSettings['xFilter'] = 15
 data.psSettings['zFilter']  = 3
 data.psSettings['dopThresh'] = 0.85
 data.psSettings['maxRet'] = 100
@@ -175,7 +171,7 @@ processor.processFrameRange(data, procState='struct+ps+hsv', procAll=True, write
 
 
 #%%
-disp_z =  np.arange(-3,4) + 430 # np.arange(645,700) #
+disp_z =  np.arange(50) + 570 # np.arange(645,700) #
 disp_x = np.array([700])
 
 disp_SVN1 = cp.asnumpy(SVN1[disp_z, disp_x, :,  (data.psSettings['binFract']-1)])
