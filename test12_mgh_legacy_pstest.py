@@ -28,10 +28,11 @@ import shutil, time
 # session_name = '[p.Chicken052621][s.SANsChicken_smallV][05-26-2021_13-11-59]'
 # path_dir = os.path.join(os.getcwd(), 'example_data', session_name)
 # path_dir = 'C:\\Users\\UCL-SPARC\\Downloads\\OS1_D1'
-path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D7'
-
+# path_dir = r'G:\test_psphantoms\user.Stephanie\[p.legacy_ps]\[p.legacy_ps][s.phantom_smallbiseg][08-16-2021_14-14-56]'
+# path_dir = r'G:\test_psphantoms\user.Stephanie\[p.ps_test]\[p.ps_test][s.phantom_noglass][10-13-2021_16-15-48]'
+path_dir = r'G:\test_psphantoms\user.Stephanie\[p.ps_test]\[p.ps_test][s.mirror][10-14-2021_13-46-56]'
 data = Load(directory = path_dir)
-data.loadFringe(frame=1000)
+data.loadFringe(frame=5)
 
 
 # #%%
@@ -57,9 +58,9 @@ data.loadFringe(frame=1000)
 #%% Tomogram processing : complex tomogram, k-space fringe, stokes vectors  
 data.reconstructionSettings['processState'] = 'struct+angio+ps+stokes+hsv'#'+kspace'
 data.reconstructionSettings['spectralBinning'] = True
-data.reconstructionSettings['depthIndex'] = [950, 950+1024]
+# data.reconstructionSettings['depthIndex'] = [950, 950+1024]
 data.reconstructionSettings['binFract'] = 3
-data.reconstructionSettings['demodSet'] = [0.5, 0.0, 1.0, 0.0, 0.0, 0.0]
+# data.reconstructionSettings['demodSet'] = [0.5, 0.0, 1.0, 0.0, 0.0, 0.0]
 
 # data.processOptions['OOPAveraging'] = True
 # data.processOptions['correctSystemOA'] = True
@@ -79,6 +80,10 @@ print("outtom['sv1'].shape >> ", outtom['sv1'].shape)
 if outtom['k1'] is not None:
     print("outtom['k1'].shape >> ", outtom['k1'].shape)
 
+#%%
+
+
+
 #%% Structure processing
 data.structureSettings['contrastLowHigh'] = [0,195]# [-50, 160]
 struct_obj = Structure(mode='log')
@@ -91,10 +96,10 @@ plt.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
 
 
 #%% PS processing
-data.psSettings['zOffset'] = 6 # this is deltaZ for differential calculation
+data.psSettings['zOffset'] = 10 # this is deltaZ for differential calculation
 data.psSettings['oopFilter']  = 2
 data.psSettings['xFilter'] = 11
-data.psSettings['zFilter']  = 1
+data.psSettings['zFilter']  = 3
 data.psSettings['dopThresh'] = 0.85
 data.psSettings['maxRet'] = 100
 data.psSettings['binFract'] = data.reconstructionSettings['binFract']
@@ -119,7 +124,11 @@ ax = fig.add_subplot(224)
 ax.imshow(data.processedData['oa'], aspect='auto')
 plt.show()
 
+SVF1, SVF2, SVN1, SVN2, QUV1, QUV2 = filtNormStokes(data.processedData['sv1'],
+                                                    data.processedData['sv2'],
+                                                    stokesFilter=ps.filter)
 
+sys.exit()
 #%% Process and save the whole volume
 # Set up logging to print on Spyder console
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -144,3 +153,43 @@ shutil.copy(src, dst)
 processor = Post()
 processor.processFrameRange(data, procState='struct+ps+hsv', procAll=True, writeState=True)
                             # procAll=False, startFrame=1000, endFrame=1100, writeState=True)
+
+
+
+#%%
+"""
+import napari
+\
+# Looking at QUV (filtered and normalized)
+viewer = napari.Viewer()
+viewer.add_image(cp.asnumpy(SVN1), name='SVN1', rgb=False, contrast_limits=(-1,1) )
+viewer.add_image(cp.asnumpy(SVN2), name='SVN2', rgb=False, contrast_limits=(-1,1) )
+
+%matplotlib qt 
+"""
+
+
+disp_z =  np.arange(560,610) # np.arange(645,700) #
+disp_x = np.array([700])
+
+disp_SVN1 = cp.asnumpy(SVN1[disp_z, disp_x, :,  data.psSettings['binFract']])
+disp_SVN2 = cp.asnumpy(SVN2[disp_z, disp_x, :,  data.psSettings['binFract']])
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+r = 1
+phi, theta = np.mgrid[0.0:np.pi:100j, 0.0:2.0*np.pi:100j]
+x = r*np.sin(phi)*np.cos(theta)
+y = r*np.sin(phi)*np.sin(theta)
+z = r*np.cos(phi)
+ax.plot_surface(x, y, z,  rstride=1, cstride=1, color='c', alpha=0.1, linewidth=0)
+
+# Data for a three-dimensional line
+ax.plot3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], 'gray')
+ax.plot3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], 'gray')
+
+# Data for three-dimensional scattered points
+ax.scatter3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], c=disp_z, cmap='spring');
+ax.scatter3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], c=disp_z, cmap='spring');
+
