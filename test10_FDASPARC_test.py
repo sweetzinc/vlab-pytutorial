@@ -28,7 +28,8 @@ import shutil, time
 # session_name = '[p.Chicken052621][s.SANsChicken_smallV][05-26-2021_13-11-59]'
 # path_dir = os.path.join(os.getcwd(), 'example_data', session_name)
 # path_dir = 'C:\\Users\\UCL-SPARC\\Downloads\\OS1_D1'
-path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D7'
+# path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D7'
+path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D1'
 
 data = Load(directory = path_dir)
 data.loadFringe(frame=1000)
@@ -57,9 +58,9 @@ data.loadFringe(frame=1000)
 #%% Tomogram processing : complex tomogram, k-space fringe, stokes vectors  
 data.reconstructionSettings['processState'] = 'struct+angio+ps+stokes+hsv'#'+kspace'
 data.reconstructionSettings['spectralBinning'] = True
-data.reconstructionSettings['depthIndex'] = [950, 950+1024]
-data.reconstructionSettings['binFract'] = 3
-data.reconstructionSettings['demodSet'] = [0.5, 0.0, 1.0, 0.0, 0.0, 0.0]
+data.reconstructionSettings['depthIndex'] = [0,0]#[950, 950+1024]
+# data.reconstructionSettings['binFract'] = 3
+# data.reconstructionSettings['demodSet'] = [0.4, 0.0, 1.0, 0.0, 0.0, 0.0]
 
 # data.processOptions['OOPAveraging'] = True
 # data.processOptions['correctSystemOA'] = True
@@ -80,7 +81,7 @@ if outtom['k1'] is not None:
     print("outtom['k1'].shape >> ", outtom['k1'].shape)
 
 #%% Structure processing
-data.structureSettings['contrastLowHigh'] = [0,195]# [-50, 160]
+# data.structureSettings['contrastLowHigh'] = [0,195]# [-50, 160]
 struct_obj = Structure(mode='log')
 struct_out = struct_obj.reconstruct(data=data)
 for key,val in struct_out.items():
@@ -91,17 +92,18 @@ plt.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
 
 
 #%% PS processing
-data.psSettings['zOffset'] = 6 # this is deltaZ for differential calculation
-data.psSettings['oopFilter']  = 2
-data.psSettings['xFilter'] = 11
-data.psSettings['zFilter']  = 1
-data.psSettings['dopThresh'] = 0.85
-data.psSettings['maxRet'] = 100
-data.psSettings['binFract'] = data.reconstructionSettings['binFract']
-data.psSettings['thetaOffset'] = 0
+# data.psSettings['zOffset'] = 6 # this is deltaZ for differential calculation
+# data.psSettings['oopFilter']  = 2
+# data.psSettings['xFilter'] = 11
+# data.psSettings['zFilter']  = 1
+# data.psSettings['dopThresh'] = 0.85
+# data.psSettings['maxRet'] = 100
+# data.psSettings['binFract'] = data.reconstructionSettings['binFract']
+# data.psSettings['thetaOffset'] = 0
+# data.hsvSettings['maskThresholds'] = np.array([230, 15, 30])
 
 print(data.psSettings)
-ps = Polarization('sb') # Polarization('sb')
+ps = Polarization('sym') # Polarization('sb')
 outps = ps.reconstruct(data=data)
 for key,val in outps.items():
     data.processedData[key] = outps[key]
@@ -119,6 +121,11 @@ ax = fig.add_subplot(224)
 ax.imshow(data.processedData['oa'], aspect='auto')
 plt.show()
 
+SVF1, SVF2, SVN1, SVN2, QUV1, QUV2 = filtNormStokes(data.processedData['sv1'],
+                                                    data.processedData['sv2'],
+                                                    stokesFilter=ps.filter)
+
+sys.exit()
 
 #%% Process and save the whole volume
 # Set up logging to print on Spyder console
@@ -137,10 +144,58 @@ data.reconstructionMode = {'tom': 'heterodyne',
 
 data.generateEditSettings()
 src = os.path.join(path_dir, 'editsettings.ini')
-dst = os.path.join(path_dir, 'settings', 'spyder_used_editsettings.ini')
+dst = os.path.join(path_dir, 'Processed', 'spyder_used_editsettings.ini')
 shutil.copy(src, dst)
 
 # The data object still contains the settings parameters defined above carry over.
 processor = Post()
-processor.processFrameRange(data, procState='struct+ps+hsv', procAll=True, writeState=True)
-                            # procAll=False, startFrame=1000, endFrame=1100, writeState=True)
+processor.processFrameRange(data, procState='struct+ps+hsv+angio', #procAll=True, writeState=True)
+                            procAll=False, startFrame=1, endFrame=1000, writeState=True)
+
+sys.exit()
+#%%
+"""
+import napari
+
+# Looking at QUV (filtered and normalized)
+viewer = napari.Viewer()
+viewer.add_image(cp.asnumpy(SVN1), name='SVN1', rgb=False, contrast_limits=(-1,1) )
+viewer.add_image(cp.asnumpy(SVN2), name='SVN2', rgb=False, contrast_limits=(-1,1) )
+
+
+viewer2 = napari.Viewer()
+viewer2.add_image(cp.asnumpy( data.processedData['dop']/255), name='dop', contrast_limits=(0,1), rgb=False)
+viewer2.add_image(cp.asnumpy( data.processedData['struct']/255), name='nlog_struct', contrast_limits=(0,1), rgb=False)
+
+%matplotlib qt 
+"""
+
+
+
+disp_z =  np.arange(390,440) # np.arange(645,700) #
+disp_x = np.array([260])
+
+disp_SVN1 = cp.asnumpy(SVN1[disp_z, disp_x, :,  (data.psSettings['binFract']-1)])
+disp_SVN2 = cp.asnumpy(SVN2[disp_z, disp_x, :,  (data.psSettings['binFract']-1)])
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+r = 1
+phi, theta = np.mgrid[0.0:np.pi:100j, 0.0:2.0*np.pi:100j]
+x = r*np.sin(phi)*np.cos(theta)
+y = r*np.sin(phi)*np.sin(theta)
+z = r*np.cos(phi)
+ax.plot_surface(x, y, z,  rstride=1, cstride=1, color='c', alpha=0.1, linewidth=0)
+
+# Data for a three-dimensional line
+pdict_line1 = {'linewidth':0.5, 'color':'red'}
+pdict_line2 = {'linewidth':0.5, 'color':'blue'}
+
+ax.plot3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], **pdict_line1)
+ax.plot3D(disp_SVN2[:,0], disp_SVN2[:,1], disp_SVN2[:,2], **pdict_line2)
+
+# Data for three-dimensional scattered points
+ax.scatter3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], c=disp_z, cmap='autumn')
+ax.scatter3D(disp_SVN2[:,0], disp_SVN2[:,1], disp_SVN2[:,2], c=disp_z, cmap='winter')
+
