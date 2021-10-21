@@ -34,8 +34,7 @@ import shutil, time
 #%% Load data
 # session_name = '[p.Chicken052621][s.SANsChicken_smallV][05-26-2021_13-11-59]'
 # path_dir = os.path.join(os.getcwd(), 'example_data', session_name)
-# path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.intralipid4pct][10-14-2021_13-46-01]'
-path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.intralipid4pct][10-15-2021_10-36-17]'
+path_dir = r'D:\OFDIData\legacy_pstest\[p.ps_test][s.intralipid4pct][10-14-2021_13-46-01]'
 data = Load(directory = path_dir)
 data.loadFringe(frame=5)
 
@@ -181,7 +180,7 @@ viewer2.add_image(cp.asnumpy( data.processedData['struct']/255), name='nlog_stru
 
 
 #%%
-disp_z =  np.arange(50) + 490 # np.arange(645,700) #
+disp_z =  np.arange(50) + 580 # np.arange(645,700) #
 disp_x = np.array([700])
 
 disp_SVN1 = cp.asnumpy(SVN1[disp_z, disp_x, :,  (data.psSettings['binFract']-1)])

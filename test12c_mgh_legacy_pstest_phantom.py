@@ -20,6 +20,13 @@ if module_path not in sys.path:
 # Import oct-cbort library
 from oct import *
 
+# ASN libs
+module_path2=os.path.abspath(os.path.join(pc_path, 'asnlibs'))
+if module_path2 not in sys.path:
+    sys.path.append(module_path2)
+from mgh_io import MGHio
+from asndev_analysis import mark_line
+
 # Import additional libraries
 import shutil, time
 
@@ -56,7 +63,7 @@ data.loadFringe(frame=5)
 data.reconstructionSettings['processState'] = 'struct+angio+ps+stokes+hsv'#'+kspace'
 data.reconstructionSettings['spectralBinning'] = True
 # data.reconstructionSettings['depthIndex'] = [950, 950+1024]
-data.reconstructionSettings['binFract'] = 3
+data.reconstructionSettings['binFract'] = 2
 # data.reconstructionSettings['demodSet'] = [0.5, 0.0, 1.0, 0.0, 0.0, 0.0]
 
 # data.processOptions['OOPAveraging'] = True
@@ -95,15 +102,15 @@ plt.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
 #%% PS processing
 data.psSettings['zOffset'] = 10 # this is deltaZ for differential calculation
 data.psSettings['oopFilter']  = 2
-data.psSettings['xFilter'] = 15
-data.psSettings['zFilter']  = 3
+data.psSettings['xFilter'] = 11
+data.psSettings['zFilter']  = 5
 data.psSettings['dopThresh'] = 0.85
 data.psSettings['maxRet'] = 100
 data.psSettings['binFract'] = data.reconstructionSettings['binFract']
 data.psSettings['thetaOffset'] = 0
 
 print(data.psSettings)
-ps = Polarization('sb') # Polarization('sb')
+ps = Polarization('sym') # Polarization('sb')
 outps = ps.reconstruct(data=data)
 for key,val in outps.items():
     data.processedData[key] = outps[key]
@@ -125,7 +132,7 @@ SVF1, SVF2, SVN1, SVN2, QUV1, QUV2 = filtNormStokes(data.processedData['sv1'],
                                                     data.processedData['sv2'],
                                                     stokesFilter=ps.filter)
 
-sys.exit()
+# sys.exit()
 
 #%%
 """
@@ -133,44 +140,50 @@ import napari
 
 # Looking at QUV (filtered and normalized)
 viewer = napari.Viewer()
-viewer.add_image(cp.asnumpy(SVN1), name='SVN1', rgb=False, contrast_limits=(-1,1) )
-viewer.add_image(cp.asnumpy(SVN2), name='SVN2', rgb=False, contrast_limits=(-1,1) )
-viewer.add_image(cp.asnumpy( data.processedData['dop']/255), name='dop', contrast_limits=(0,1), rgb=False)
-viewer.add_image(cp.asnumpy( data.processedData['struct']/255), name='nlog_struct', contrast_limits=(0,1), rgb=False)
+viewer.add_image(cp.asnumpy(SVN1), name='SVN1', rgb=False, contrast_limits=(-1,1), colormap='viridis' )
+viewer.add_image(cp.asnumpy(SVN2), name='SVN2', rgb=False, contrast_limits=(-1,1), colormap='viridis' )
+
+viewer2 = napari.Viewer()
+viewer2.add_image(cp.asnumpy( data.processedData['dop']/255), name='dop', contrast_limits=(0,1), rgb=False)
+viewer2.add_image(cp.asnumpy( data.processedData['struct']/255), name='nlog_struct', contrast_limits=(0,1), rgb=False)
 %matplotlib qt 
 """
 
 
 #%% Process and save the whole volume
-# Set up logging to print on Spyder console
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.__dict__
+# # Set up logging to print on Spyder console
+# logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+# logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
+# logger.__dict__
 
-# Initialize the post processor. 
-# Write editsettings.ini file and copy to the settings folder
-data.reconstructionMode = {'tom': 'heterodyne', 
-                           'struct': 'log', 
-                           'angio': 'cdv', 
-                           'ps': 'sym'}
+# # Initialize the post processor. 
+# # Write editsettings.ini file and copy to the settings folder
+# data.reconstructionMode = {'tom': 'heterodyne', 
+#                            'struct': 'log', 
+#                            'angio': 'cdv', 
+#                            'ps': 'sym'}
 
 
-data.generateEditSettings()
-src = os.path.join(path_dir, 'editsettings.ini')
-dst = os.path.join(path_dir, 'settings', 'spyder_used_editsettings.ini')
-shutil.copy(src, dst)
+# data.generateEditSettings()
+# src = os.path.join(path_dir, 'editsettings.ini')
+# dst = os.path.join(path_dir, 'settings', 'spyder_used_editsettings.ini')
+# shutil.copy(src, dst)
 
-# The data object still contains the settings parameters defined above carry over.
-processor = Post()
-processor.processFrameRange(data, procState='struct+ps+hsv', procAll=True, writeState=True)
-                            # procAll=False, startFrame=1000, endFrame=1100, writeState=True)
+# # The data object still contains the settings parameters defined above carry over.
+# processor = Post()
+# processor.processFrameRange(data, procState='struct+ps+hsv', procAll=True, writeState=True)
+#                             # procAll=False, startFrame=1000, endFrame=1100, writeState=True)
 
 
 
 
 
 #%%
+"""
+%matplotlib qt 
+"""
+
 disp_z =  np.arange(60) + 400 # np.arange(645,700) #
 disp_x = np.array([750])
 
@@ -198,3 +211,8 @@ ax.plot3D(disp_SVN2[:,0], disp_SVN2[:,1], disp_SVN2[:,2], **pdict_line2)
 ax.scatter3D(disp_SVN1[:,0], disp_SVN1[:,1], disp_SVN1[:,2], c=disp_z, cmap='autumn')
 ax.scatter3D(disp_SVN2[:,0], disp_SVN2[:,1], disp_SVN2[:,2], c=disp_z, cmap='winter')
 
+#%%
+fig, ax = plt.subplots(1,1)
+ax.imshow(cp.asnumpy(struct_out['struct']), aspect ='auto', cmap='gray')
+
+ax = mark_line(ax, (disp_z[[0,-1]], disp_x), orientation_dim=1)
