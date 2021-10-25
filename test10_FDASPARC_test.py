@@ -10,8 +10,8 @@ Stephanie Nam (snam@alum.mit.edu)
 #Import required system libraries for file management
 import sys,importlib,os
 
-# pc_path = 'C:\\Users\\vlab_eye\\Documents\\local_repo' #
-pc_path = 'C:\\Users\\UCL-SPARC\\Documents\\GitHub'
+pc_path = 'C:\\Users\\vlab_eye\\Documents\\local_repo' #
+# pc_path = 'C:\\Users\\UCL-SPARC\\Documents\\GitHub'
 # Provide path to oct-cbort library
 module_path = os.path.abspath(os.path.join(pc_path, 'oct-cbort'))
 if module_path not in sys.path:
@@ -28,8 +28,7 @@ import shutil, time
 # session_name = '[p.Chicken052621][s.SANsChicken_smallV][05-26-2021_13-11-59]'
 # path_dir = os.path.join(os.getcwd(), 'example_data', session_name)
 # path_dir = 'C:\\Users\\UCL-SPARC\\Downloads\\OS1_D1'
-# path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D7'
-path_dir = 'F:\\SPARC-FDA\\SL2\\OS1_D1'
+path_dir = 'D:\\SPARC-FDA\\SL2\\OS1_D7'
 
 data = Load(directory = path_dir)
 data.loadFringe(frame=1000)
@@ -150,7 +149,7 @@ shutil.copy(src, dst)
 # The data object still contains the settings parameters defined above carry over.
 processor = Post()
 processor.processFrameRange(data, procState='struct+ps+hsv+angio', #procAll=True, writeState=True)
-                            procAll=False, startFrame=1, endFrame=1000, writeState=True)
+                            procAll=False, startFrame=1, endFrame=200, writeState=True)
 
 sys.exit()
 #%%
