@@ -44,7 +44,7 @@ conda activate spyderenv
 
 # Install basic libraries
 conda install numpy scipy matplotlib h5py
-conda install spyder=5.0.5 
+conda install spyder=5.1.5 
 
 # Run SPYDER
 spyder
@@ -154,7 +154,7 @@ jupyter notebook
 2. Install spyder kernel (in the cobrt repository)
 ```bash
 conda activate oct38-cpu
-pip install spyder-kernels
+pip install spyder-kernels==2.1.3
 conda deactivate
 conda activate spyderenv
 spyder
